@@ -1,6 +1,8 @@
 import pygame as game
 import os
 
+import pygame.constants
+
 Width, Height = 900, 500
 Window = game.display.set_mode((Width, Height))
 game.display.set_caption("Bouncy Bob") #Add a cool lil title thing later
@@ -16,13 +18,16 @@ redShip = loadFromAssets("spaceship_red.png")
 redShip = game.transform.scale(redShip, (50, 40))
 redShip = game.transform.rotate(redShip, -90)
 
-def draw_window():
+def draw_window(red,  yellow):
     Window.fill((0, 255, 0))
-    Window.blit(yellowShip, (200, 200))
-    Window.blit(redShip, (600, 200))
+    Window.blit(yellowShip, (yellow.x, yellow.y))
+    Window.blit(redShip, (red.x, yellow.y))
     game.display.update()
 
 def master():
+    red = game.Rect(100 , 300, 50, 40)
+    yellow = game.Rect(100 , 300, 50, 40)
+
     clock = game.time.Clock()
     play = True
     while play:
@@ -31,7 +36,12 @@ def master():
             if event.type == game.QUIT:
                 play = False
 
-        draw_window()
+        keys_pressed = game.key.get_pressed()
+        if keys_pressed[pygame.K_a]:
+            red.x -= 1
+
+        yellow.x += 3
+        draw_window(red, yellow)
 
     game.quit()
 
