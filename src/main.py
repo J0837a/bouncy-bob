@@ -5,7 +5,7 @@ import pygame.constants
 
 Width, Height = 900, 500
 Window = game.display.set_mode((Width, Height))
-game.display.set_caption("Bouncy Bob") #Add a cool lil title thing later
+game.display.set_caption("Bouncy Bob") #Add a cool lile title thing later
 FPS = 60
 
 def loadFromAssets(file):
