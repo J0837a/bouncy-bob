@@ -1,9 +1,9 @@
+from basics import bulletHitInvader
 import pygame
 import random
-
 class laser:
     def __init__(self, shooter, player):
-        self.rect = pygame.Rect(shooter.x + (shooter.waist // 2), shooter.y - (shooter.height // 2), 5, 10)
+        self.rect = pygame.Rect(shooter.x + (shooter.waist // 2), shooter.y - (shooter.height // 2), 2, 10)
         self.collisions = True
         self.randomEvents = False
         self.x = 0
@@ -26,12 +26,14 @@ class laser:
             objectClass = targets[x]
             if self.rect.colliderect(objectClass.rect) and self.rect != objectClass.rect:
                 if self.isPlayer:
+                    pygame.event.post(pygame.event.Event(bulletHitInvader))
                     targets.remove(objectClass)
                     targets.remove(self)
                     break
                 elif objectClass.className == "Player":
                     targets.remove(objectClass)
                     targets.remove(self)
+                    pygame.quit()
                     break
 
 class imageObjectRect:
@@ -62,10 +64,11 @@ class player(imageObjectRect):
         self.className = "Player"
 
 class invader(imageObjectRect):
-    def __init__(self, image, height, waist, x, y):
+    def __init__(self, image, height, waist, x, y, boost):
         imageObjectRect.__init__(self, image, height, waist, x, y)
         self.randomEvents = True
         self.className = "Invader"
+        self.boost = boost
 
     def boxSync(self):
         self.rect.x = self.x
@@ -78,7 +81,7 @@ class invader(imageObjectRect):
             self.y += 30
             self.x = 20
 
-        self.x += 1
+        self.x += 1 + self.boost
 
         self.boxSync()
 
