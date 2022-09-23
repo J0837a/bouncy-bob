@@ -10,6 +10,7 @@ Window = game.display.set_mode((Width, Height))
 game.display.set_caption("Bouncy Bob") #Add a cool lile title thing later
 FPS = 60
 gameFont = game.font.SysFont('comicsans', 20)
+bg = game.transform.scale(loadFromAssets("bg.jpg"), (Width, Height))
 
 objects = [player()]
 
@@ -20,7 +21,7 @@ def spawnPipes():
     objects.append(scoreMarker())
 
 def tick():
-    Window.fill((255, 255, 255))
+    Window.blit(bg, (0, 0))
     for obj in objects:
         if obj.nick == "Player":
             obj.tick(Window, objects)

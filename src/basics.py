@@ -29,7 +29,7 @@ class scoreMarker:
         self.rect = pygame.Rect(800 + 15, 0, 15, 500)
 
     def tick(self, window):
-        pygame.draw.rect(window, (255, 0, 0), self)
+        #pygame.draw.rect(window, (255, 0, 0), self)
         self.rect.x -= 2
 
 class player:
