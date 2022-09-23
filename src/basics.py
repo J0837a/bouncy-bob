@@ -9,6 +9,7 @@ def loadFromAssets(file):
 
 class wall:
     def __init__(self, y, top):
+        self.nick = "Wall"
         self.x = 800
         self.y = y
 
@@ -23,6 +24,7 @@ class wall:
 
 class scoreMarker:
     def __init__(self):
+        self.nick = "Score"
         self.x = 800
         self.rect = pygame.Rect(800 + 15, 0, 15, 500)
 
@@ -32,14 +34,16 @@ class scoreMarker:
 
 class player:
     def __init__(self):
+        self.nick = "Player"
         self.x = 300
         self.y = 250
         self.rect = pygame.Rect(self.x, self.y, 30, 30)
         self.jumping = False
         self.jumpTicks = 0
         self.cooldownTicks = -1
+        self.score = 0
 
-    def tick(self, window):
+    def tick(self, window, objects):
         pygame.draw.rect(window, (0, 255, 0), self)
 
         if self.jumping and self.jumpTicks < 0:
@@ -52,4 +56,11 @@ class player:
             self.jumpTicks -= 1
 
         self.cooldownTicks -= 1
+
+        for obj in objects:
+            if self.rect.colliderect(obj.rect):
+                if obj.nick == "Wall":
+                    pygame.event.post(pygame.event.Event(hitWall))
+                elif obj.nick == "Score":
+                    pygame.event.post(pygame.event.Event(passCheckpoint))
 
