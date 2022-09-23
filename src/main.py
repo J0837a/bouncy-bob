@@ -15,30 +15,35 @@ bg = game.transform.scale(loadFromAssets("bg.jpg"), (Width, Height))
 objects = [player()]
 
 def spawnPipes():
-    center = rand.randint(30, 470)
+    center = rand.randint(80, 410)
     objects.append(wall(center - 50, True))
     objects.append(wall(center + 50, False))
     objects.append(scoreMarker())
 
-def tick():
+def tick(paused):
     Window.blit(bg, (0, 0))
-    for obj in objects:
-        if obj.nick == "Player":
-            obj.tick(Window, objects)
-        else:
-            obj.tick(Window)
+    if not paused:
+        for obj in objects:
+            if obj.nick == "Player":
+                obj.tick(Window, objects)
+            else:
+                obj.tick(Window)
 
-        if obj.rect.x < -30:
-            objects.remove(obj)
+            if obj.rect.x < -30:
+                objects.remove(obj)
 
-    scoreDisplay = gameFont.render("Score: " + str(objects[0].score), 1, (128, 0, 128))
-    Window.blit(scoreDisplay, (10, 10))
+        scoreDisplay = gameFont.render("Score: " + str(objects[0].score), 1, (128, 0, 128))
+        Window.blit(scoreDisplay, (10, 10))
+    else:
+        deadDisplay = gameFont.render("You died, pog champ", 1, (128, 0, 128))
+        Window.blit(deadDisplay, (450, 250))
 
     game.display.update()
 
 def master():
     clock = game.time.Clock()
     play = True
+    paused = False
     spawnPipes()
     while play:
         clock.tick(FPS)
@@ -46,7 +51,7 @@ def master():
             if event.type == game.QUIT:
                 play = False
             if event.type == hitWall:
-                play = False
+                paused = True
             if event.type == passCheckpoint and len(objects) < 5:
                 objects[0].score += 1
                 spawnPipes()
@@ -59,7 +64,7 @@ def master():
                 objects[0].jumpTicks = 10
                 objects[0].cooldownTicks = 10
 
-        tick()
+        tick(paused)
 
     game.quit()
 
